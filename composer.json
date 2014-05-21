@@ -1,0 +1,26 @@
+{
+    "name": "bozboz/enquiry",
+    "description": "",
+    "authors": [
+        {
+            "name": "Sam King",
+            "email": "sdking02@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.1.*",
+        "illuminate/validation": "4.1.*",
+        "illuminate/mail": "4.1.*",
+        "illuminate/config": "4.1.*"
+    },
+    "require-dev": {
+        "mockery/mockery": "0.9.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Bozboz\\Enquiry": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
