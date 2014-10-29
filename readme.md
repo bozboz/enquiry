@@ -4,7 +4,7 @@
 
 1. Add `Bozboz\Enquiry\EnquiryServiceProvider` to the `providers` array in `app/config/app.php`
 2. Add `contact_recipient` and `contact_name` to `app/config/app.php`
-3. Add `'Enquiry' => 'Bozboz\Enquiry\Facades\Enquiry'` to the `alias` array in `app/config/app.php`
+3. Add `'Enquiry' => 'Bozboz\Enquiry\Facades\Enquiry'` to the `aliases` array in `app/config/app.php`
 4. Set `from` and `name` in `app/config/mail.php`
 5. Setup a route
 
