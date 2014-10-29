@@ -6,6 +6,13 @@
 
 2. Add `contact_recipient` and `contact_name` to `app/config/app.php`
 
+2. Add the following to `app/config/app.php`
+
+        'enquiry_recipient_address' => $_ENV['ENQUIRY_RECIPIENT_ADDRESS'],
+        'enquiry_recipient_name' => $_ENV['ENQUIRY_RECIPIENT_NAME'],
+
+Consequently define the environment variables in your `.env.dev.php` file.
+
 3. Add `'Enquiry' => 'Bozboz\Enquiry\Facades\Enquiry'` to the `aliases` array in `app/config/app.php`
 
 4. Set `from` and `name` in `app/config/mail.php`

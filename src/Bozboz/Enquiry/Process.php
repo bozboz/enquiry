@@ -35,7 +35,7 @@ class Process
 		$this->mailer->send(array('emails.enquiry', 'emails.enquiry-text'), array('fields' => $fields), function($message)
 		{
 			$config = $this->config;
-			$message->to($config->get('app.contact_recipient'),	$config->get('app.contact_name'))->subject('Contact Enquiry');
+			$message->to($config->get('app.enquiry_recipient_address'),	$config->get('app.enquiry_recipient_name'))->subject('Contact Enquiry');
 		});
 	}
 
