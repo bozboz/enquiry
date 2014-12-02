@@ -50,7 +50,8 @@ class Process
 
 		$vars = [
 			'fields' => $fields,
-			'time' => new DateTime
+			'time' => new DateTime,
+			'referer' => $_SERVER['HTTP_REFERER']
 		];
 
 		$this->mailer->send($views, $vars, function($message)
