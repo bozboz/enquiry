@@ -44,8 +44,13 @@ class Process
 		return $this->validation->fails();
 	}
 
-	public function validator()
+	/**
+	 * Get validation errors
+	 *
+	 * @return Illuminate\Support\MessageBag
+	 */
+	public function getErrors()
 	{
-		return $this->validation;
+		return $this->validation->errors();
 	}
 }

@@ -28,7 +28,7 @@ Consequently define the environment variables in your `.env.dev.php` file.
             ));
 
             if ($enquiry->fails()) {
-                return Redirect::to(URL::previous() . '#form')->withInput()->withErrors($enquiry->validator());
+                return Redirect::to(URL::previous() . '#form')->withInput()->withErrors($enquiry->getErrors());
             } else {
                 return Redirect::to(URL::previous() . '#form')->with('success', true);
             }
