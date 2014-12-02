@@ -3,6 +3,7 @@
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Mail\Mailer;
 use Illuminate\Config\Repository AS Config;
+use DateTime;
 
 class Process
 {
@@ -18,6 +19,13 @@ class Process
 		$this->config = $config;
 	}
 
+	/**
+	 * Validate (on given $rules) and send an enquiry, comprised of given $input
+	 *
+	 * @param  Array  $input
+	 * @param  Array  $rules
+	 * @return $this
+	 */
 	public function make(Array $input, Array $rules)
 	{
 		$this->validation = $this->validator->make($input, $rules);
@@ -27,18 +35,38 @@ class Process
 		return $this;
 	}
 
+	/**
+	 * Send enquiry email email
+	 *
+	 * @param  array  $fields
+	 * @return void
+	 */
 	private function sendEmail(array $fields)
 	{
 		if(isset($fields['_token']))
 			unset($fields['_token']);
 
-		$this->mailer->send(array('emails.enquiry', 'emails.enquiry-text'), array('fields' => $fields), function($message)
+		$views = ['emails.enquiry', 'emails.enquiry-text'];
+
+		$vars = [
+			'fields' => $fields,
+			'time' => new DateTime
+		];
+
+		$this->mailer->send($views, $vars, function($message)
 		{
 			$config = $this->config;
-			$message->to($config->get('app.enquiry_recipient_address'),	$config->get('app.enquiry_recipient_name'))->subject('Contact Enquiry');
+			$message
+				->to($config->get('app.enquiry_recipient_address'),	$config->get('app.enquiry_recipient_name'))
+				->subject('Contact Enquiry');
 		});
 	}
 
+	/**
+	 * Determine if validation has failed
+	 *
+	 * @return boolean
+	 */
 	public function fails()
 	{
 		return $this->validation->fails();
