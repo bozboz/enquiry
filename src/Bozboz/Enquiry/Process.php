@@ -57,7 +57,7 @@ class Process
 		{
 			$config = $this->config;
 			$message
-				->to($config->get('app.enquiry_recipient_address'),	$config->get('app.enquiry_recipient_name'))
+				->to($config->get('app.enquiry_recipient_address'), $config->get('app.enquiry_recipient_name'))
 				->subject('Contact Enquiry');
 		});
 	}
