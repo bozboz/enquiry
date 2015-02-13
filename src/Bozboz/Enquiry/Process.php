@@ -24,8 +24,8 @@ class Process
 
 	public function to($recipientAddress, $recipientName = null)
 	{
-		$this->recipientAddress = $recipientAddress ?: $config->get('app.enquiry_recipient_address');
-		$this->recipientName = $recipientName ?: $config->get('app.enquiry_recipient_name');
+		$this->recipientAddress = $recipientAddress;
+		$this->recipientName = $recipientName;
 
 		return $this;
 	}
@@ -69,9 +69,10 @@ class Process
 		$this->mailer->send($views, $vars, function($message) use ($subject)
 		{
 			$config = $this->config;
-			$message
-				->to($this->recipientAddress, $this->recipientName)
-				->subject($subject ?: 'Contact Enquiry');
+			$message->to(
+				$this->recipientAddress ?: $config->get('app.enquiry_recipient_address'),
+				$this->recipientName ?: $config->get('app.enquiry_recipient_name')
+			)->subject($subject ?: 'Contact Enquiry');
 		});
 	}
 
