@@ -8,9 +8,12 @@ use DateTime;
 class Process
 {
 	private $validator;
-	private $validation;
 	private $mailer;
 	private $config;
+
+	private $recipientName;
+	private $recipientAddress;
+	private $validation;
 
 	public function __construct(Validator $validator, Mailer $mailer, Config $config)
 	{
@@ -19,18 +22,28 @@ class Process
 		$this->config = $config;
 	}
 
+	public function to($recipientAddress, $recipientName = null)
+	{
+		$this->recipientAddress = $recipientAddress ?: $config->get('app.enquiry_recipient_address');
+		$this->recipientName = $recipientName ?: $config->get('app.enquiry_recipient_name');
+
+		return $this;
+	}
+
 	/**
 	 * Validate (on given $rules) and send an enquiry, comprised of given $input
 	 *
 	 * @param  Array  $input
 	 * @param  Array  $rules
+	 * @param  mixed  $views
+	 * @param  string  $subject
 	 * @return $this
 	 */
-	public function make(Array $input, Array $rules)
+	public function make(Array $input, Array $rules, $views = null, $subject = null)
 	{
 		$this->validation = $this->validator->make($input, $rules);
 		if ($this->validation->passes()) {
-			$this->sendEmail($input);
+			$this->sendEmail($input, $views, $subject);
 		}
 		return $this;
 	}
@@ -41,24 +54,24 @@ class Process
 	 * @param  array  $fields
 	 * @return void
 	 */
-	private function sendEmail(array $fields)
+	private function sendEmail(array $fields, $views, $subject)
 	{
 		if(isset($fields['_token']))
 			unset($fields['_token']);
 
-		$views = ['emails.enquiry', 'emails.enquiry-text'];
+		$views = $views ?: ['emails.enquiry', 'emails.enquiry-text'];
 
 		$vars = [
 			'fields' => $fields,
 			'time' => new DateTime
 		];
 
-		$this->mailer->send($views, $vars, function($message)
+		$this->mailer->send($views, $vars, function($message) use ($subject)
 		{
 			$config = $this->config;
 			$message
-				->to($config->get('app.enquiry_recipient_address'), $config->get('app.enquiry_recipient_name'))
-				->subject('Contact Enquiry');
+				->to($this->recipientAddress, $this->recipientName)
+				->subject($subject ?: 'Contact Enquiry');
 		});
 	}
 
