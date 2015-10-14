@@ -14,6 +14,7 @@ class Process
 	private $recipientName;
 	private $recipientAddress;
 	private $validation;
+	private $subject;
 
 	public function __construct(Validator $validator, Mailer $mailer, Config $config)
 	{
@@ -22,10 +23,30 @@ class Process
 		$this->config = $config;
 	}
 
+	/**
+	 * Override the default recipient on the enquiry
+	 *
+	 * @param  string  $recipientAddress
+	 * @param  string  $recipientName
+	 * @return $this
+	 */
 	public function to($recipientAddress, $recipientName = null)
 	{
 		$this->recipientAddress = $recipientAddress;
 		$this->recipientName = $recipientName;
+
+		return $this;
+	}
+
+	/**
+	 * Override the default subject on the enquiry
+	 *
+	 * @param  string  $subject
+	 * @return $this
+	 */
+	public function withSubject($subject)
+	{
+		$this->subject = $subject;
 
 		return $this;
 	}
@@ -43,7 +64,7 @@ class Process
 	{
 		$this->validation = $this->validator->make($input, $rules);
 		if ($this->validation->passes()) {
-			$this->sendEmail($input, $views, $subject);
+			$this->sendEmail($input, $views, $this->subject ?: $subject);
 		}
 		return $this;
 	}
