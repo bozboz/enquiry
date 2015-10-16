@@ -1,3 +1,11 @@
+# Version 1.1.0 (16/10/2015)
+
+-	Subject and views can be passed to Enquiry::make()
+-	send() method can be called prior to make, to specifiy recipient
+-	Update PSR-0 to PSR-4
+-	Add `withSubject` method to `Process`
+
+
 # Version 1.0.0 (15/01/2014)
 
 -	Bump Illuminate dependencies to 4.2
