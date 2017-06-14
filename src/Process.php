@@ -13,6 +13,8 @@ class Process
 
 	private $recipientName;
 	private $recipientAddress;
+	private $replyName;
+	private $replyAddress;
 	private $validation;
 	private $subject;
 
@@ -34,6 +36,21 @@ class Process
 	{
 		$this->recipientAddress = $recipientAddress;
 		$this->recipientName = $recipientName;
+
+		return $this;
+	}
+
+	/**
+	 * Override the default reply-to on the enquiry
+	 *
+	 * @param  string  $recipientAddress
+	 * @param  string  $recipientName
+	 * @return $this
+	 */
+	public function replyTo($replyAddress, $replyName = null)
+	{
+		$this->replyAddress = $replyAddress;
+		$this->replyName = $replyName;
 
 		return $this;
 	}
@@ -87,12 +104,15 @@ class Process
 			'time' => new DateTime
 		];
 
-		$this->mailer->send($views, $vars, function($message) use ($subject)
+		$this->mailer->send($views, $vars, function($message) use ($subject, $vars)
 		{
 			$config = $this->config;
 			$message->to(
 				$this->recipientAddress ?: $config->get('app.enquiry_recipient_address'),
 				$this->recipientName ?: $config->get('app.enquiry_recipient_name')
+			)->replyTo(
+				$this->replyAddress ?: $config->get('mail.from.address'),
+				$this->replyName ?: $config->get('mail.from.name')
 			)->subject($subject ?: 'Contact Enquiry');
 		});
 	}
